@@ -1,162 +1,128 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <title>Web Assignments Dashboard</title>
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background: #0f172a;
-            color: white;
-        }
+      body {
+        margin: 0;
+        font-family: Arial;
+        background: #0f172a;
+        color: white;
+      }
 
-        header {
-            background: #1e293b;
-            padding: 20px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-        }
+      header {
+        background: #1e293b;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+      }
 
-        .container {
-            padding: 30px;
-        }
+      .container {
+        padding: 30px;
+      }
 
-        h2 {
-            margin-top: 40px;
-            border-left: 5px solid #38bdf8;
-            padding-left: 10px;
-        }
+      h2 {
+        margin-top: 40px;
+        border-left: 5px solid #38bdf8;
+        padding-left: 10px;
+      }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
 
-        .card {
-            background: #1e293b;
-            padding: 15px;
-            text-align: center;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
+      .card {
+        background: #1e293b;
+        padding: 15px;
+        text-align: center;
+        border-radius: 10px;
+        transition: 0.3s;
+      }
 
-        .card:hover {
-            background: #334155;
-            transform: translateY(-5px);
-        }
+      .card:hover {
+        background: #334155;
+        transform: translateY(-5px);
+      }
 
-        a {
-            text-decoration: none;
-            color: white;
-        }
+      a {
+        text-decoration: none;
+        color: white;
+      }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #1e293b;
-            margin-top: 40px;
-        }
+      footer {
+        text-align: center;
+        padding: 20px;
+        background: #1e293b;
+        margin-top: 40px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <header>Web Assignments Dashboard 🚀</header>
 
-<header>
-    Web Assignments Dashboard 🚀
-</header>
+    <div class="container">
+      <h2>HTML Assignments</h2>
+      <div class="grid" id="htmlBox"></div>
 
-<div class="container">
+      <h2>JavaScript Tasks</h2>
+      <div class="grid" id="jsBox"></div>
 
-    <h2>HTML Assignments</h2>
-    <div class="grid" id="htmlBox"></div>
+      <h2>Programming Practice</h2>
+      <div class="grid" id="progBox"></div>
+    </div>
 
-    <h2>JavaScript Tasks</h2>
-    <div class="grid" id="jsBox"></div>
+    <footer>Made by Suneel 💻🔥</footer>
 
-    <h2>Programming Practice</h2>
-    <div class="grid" id="progBox"></div>
+    <script>
+      async function loadData() {
+        let res = await fetch("data.json");
+        let data = await res.json();
 
-</div>
+        let htmlBox = document.getElementById("htmlBox");
+        let jsBox = document.getElementById("jsBox");
+        let progBox = document.getElementById("progBox");
 
-<footer>
-    Made by Suneel 💻🔥
-</footer>
+        data.html.forEach((file, i) => {
+          createCard(htmlBox, file, "Ass " + (i + 1));
+        });
 
-<script>
-/* =========================
-   ⚠️ IMPORTANT:
-   Folder names MUST match exactly (lowercase recommended)
-   html / javascript / programming
-========================= */
+        data.js.forEach((file, i) => {
+          createCard(jsBox, file, "Task " + (i + 1));
+        });
 
-/* HTML FILES AUTO (1–75) */
-let htmlBox = document.getElementById("htmlBox");
+        data.programming.forEach((file) => {
+          createCard(progBox, file.path, file.name);
+        });
+      }
 
-for (let i = 1; i <= 75; i++) {
-    let path = "html/ass" + i + ".html";
+      function createCard(container, path, text) {
+        let a = document.createElement("a");
+        a.href = path;
+        a.target = "_blank";
 
-    let a = document.createElement("a");
-    a.href = path;
-    a.target = "_blank";
+        let div = document.createElement("div");
+        div.className = "card";
+        div.innerText = text;
 
-    let div = document.createElement("div");
-    div.className = "card";
-    div.innerText = "Ass " + i;
+        a.appendChild(div);
+        container.appendChild(a);
+      }
 
-    a.appendChild(div);
-    htmlBox.appendChild(a);
-}
+      // loadData();
+      async function loadData() {
+        let res = await fetch("data.json");
+        let data = await res.json();
 
+        console.log(data); // test
+      }
 
-/* JAVASCRIPT FILES AUTO (1–17) */
-let jsBox = document.getElementById("jsBox");
-
-for (let i = 1; i <= 17; i++) {
-    let path = "javascript/task" + i + ".html";
-
-    let a = document.createElement("a");
-    a.href = path;
-    a.target = "_blank";
-
-    let div = document.createElement("div");
-    div.className = "card";
-    div.innerText = "Task " + i;
-
-    a.appendChild(div);
-    jsBox.appendChild(a);
-}
-
-
-/* PROGRAMMING FILES (MANUAL LIST) */
-let progFiles = [
-    { name: "Print", path: "programming/print.txt" },
-    { name: "Input", path: "programming/input.txt" },
-    { name: "Variables", path: "programming/variables.txt" },
-    { name: "Data Types", path: "programming/data-types.txt" },
-    { name: "Arithmetic", path: "programming/arithmetic.txt" },
-    { name: "Comparison", path: "programming/comparison.txt" },
-    { name: "Exercises", path: "programming/exercises.txt" }
-];
-
-let progBox = document.getElementById("progBox");
-
-progFiles.forEach(file => {
-    let a = document.createElement("a");
-    a.href = file.path;
-    a.target = "_blank";
-
-    let div = document.createElement("div");
-    div.className = "card";
-    div.innerText = file.name;
-
-    a.appendChild(div);
-    progBox.appendChild(a);
-});
-</script>
-
-</body>
+      loadData();
+    </script>
+  </body>
 </html>
