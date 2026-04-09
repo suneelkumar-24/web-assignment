@@ -77,7 +77,7 @@
       <div class="grid" id="progBox"></div>
     </div>
 
-    <footer>Made by Suneel 💻🔥</footer>
+    <footer>Made by <a href="https://fb.com/suneelnakhtani" style="color: yellow;text-decoration: underline;">Sir Suneel</a> 💻🔥</footer>
 
     <script>
       async function loadData() {
@@ -114,15 +114,14 @@
         container.appendChild(a);
       }
 
-      // loadData();
-      async function loadData() {
-        let res = await fetch("data.json");
-        let data = await res.json();
-
-        console.log(data); // test
-      }
-
       loadData();
+      // async function loadData() {
+      //   let res = await fetch("data.json");
+      //   let data = await res.json();
+
+      //   console.log(data); // test
+      // }
+
     </script>
   </body>
 </html>

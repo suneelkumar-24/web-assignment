@@ -29,7 +29,7 @@ function scanFolder(folderPath) {
                 result.js.push(relativePath);
             }
 
-            else if (relativePath.includes("Programming")) {
+            else if (relativePath.includes("Progarmming Assignment")) {
                 result.programming.push({
                     name: item,
                     path: relativePath
