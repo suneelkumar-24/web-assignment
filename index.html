@@ -31,7 +31,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
@@ -42,7 +42,6 @@
             text-align: center;
             border-radius: 10px;
             transition: 0.3s;
-            cursor: pointer;
         }
 
         .card:hover {
@@ -72,25 +71,14 @@
 
 <div class="container">
 
-    <!-- HTML Assignments -->
     <h2>HTML Assignments</h2>
-    <div class="grid" id="htmlAssignments"></div>
+    <div class="grid" id="htmlBox"></div>
 
-    <!-- JavaScript Tasks -->
     <h2>JavaScript Tasks</h2>
-    <div class="grid" id="jsTasks"></div>
+    <div class="grid" id="jsBox"></div>
 
-    <!-- Programming -->
     <h2>Programming Practice</h2>
-    <div class="grid">
-        <a href="Programming/print.txt" target="_blank"><div class="card">Print</div></a>
-        <a href="Programming/input.txt" target="_blank"><div class="card">Input</div></a>
-        <a href="Programming/variables.txt" target="_blank"><div class="card">Variables</div></a>
-        <a href="Programming/data-types.txt" target="_blank"><div class="card">Data Types</div></a>
-        <a href="Programming/arithmetic.txt" target="_blank"><div class="card">Arithmetic</div></a>
-        <a href="Programming/comparison.txt" target="_blank"><div class="card">Comparison</div></a>
-        <a href="Programming/exercises.txt" target="_blank"><div class="card">Exercises</div></a>
-    </div>
+    <div class="grid" id="progBox"></div>
 
 </div>
 
@@ -99,37 +87,75 @@
 </footer>
 
 <script>
-    // HTML Assignments (1 to 75)
-    let htmlContainer = document.getElementById("htmlAssignments");
+/* =========================
+   ⚠️ IMPORTANT:
+   Folder names MUST match exactly (lowercase recommended)
+   html / javascript / programming
+========================= */
 
-    for (let i = 1; i <= 75; i++) {
-        let a = document.createElement("a");
-        a.href = "HTML/ass" + i + ".html";
-        a.target = "_blank";
+/* HTML FILES AUTO (1–75) */
+let htmlBox = document.getElementById("htmlBox");
 
-        let div = document.createElement("div");
-        div.className = "card";
-        div.innerText = "Ass " + i;
+for (let i = 1; i <= 75; i++) {
+    let path = "html/ass" + i + ".html";
 
-        a.appendChild(div);
-        htmlContainer.appendChild(a);
-    }
+    let a = document.createElement("a");
+    a.href = path;
+    a.target = "_blank";
 
-    // JavaScript Tasks (1 to 17)
-    let jsContainer = document.getElementById("jsTasks");
+    let div = document.createElement("div");
+    div.className = "card";
+    div.innerText = "Ass " + i;
 
-    for (let i = 1; i <= 17; i++) {
-        let a = document.createElement("a");
-        a.href = "JavaScript/task" + i + ".html";
-        a.target = "_blank";
+    a.appendChild(div);
+    htmlBox.appendChild(a);
+}
 
-        let div = document.createElement("div");
-        div.className = "card";
-        div.innerText = "Task " + i;
 
-        a.appendChild(div);
-        jsContainer.appendChild(a);
-    }
+/* JAVASCRIPT FILES AUTO (1–17) */
+let jsBox = document.getElementById("jsBox");
+
+for (let i = 1; i <= 17; i++) {
+    let path = "javascript/task" + i + ".html";
+
+    let a = document.createElement("a");
+    a.href = path;
+    a.target = "_blank";
+
+    let div = document.createElement("div");
+    div.className = "card";
+    div.innerText = "Task " + i;
+
+    a.appendChild(div);
+    jsBox.appendChild(a);
+}
+
+
+/* PROGRAMMING FILES (MANUAL LIST) */
+let progFiles = [
+    { name: "Print", path: "programming/print.txt" },
+    { name: "Input", path: "programming/input.txt" },
+    { name: "Variables", path: "programming/variables.txt" },
+    { name: "Data Types", path: "programming/data-types.txt" },
+    { name: "Arithmetic", path: "programming/arithmetic.txt" },
+    { name: "Comparison", path: "programming/comparison.txt" },
+    { name: "Exercises", path: "programming/exercises.txt" }
+];
+
+let progBox = document.getElementById("progBox");
+
+progFiles.forEach(file => {
+    let a = document.createElement("a");
+    a.href = file.path;
+    a.target = "_blank";
+
+    let div = document.createElement("div");
+    div.className = "card";
+    div.innerText = file.name;
+
+    a.appendChild(div);
+    progBox.appendChild(a);
+});
 </script>
 
 </body>
