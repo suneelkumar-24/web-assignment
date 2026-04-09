@@ -177,5 +177,38 @@
     "Javascript assignments/task8.html",
     "Javascript assignments/task9.html"
   ],
-  "programming": []
+  "programming": [
+    {
+      "name": "5. Arithmetic Operators.txt",
+      "path": "Progarmming Assignment/5. Arithmetic Operators.txt"
+    },
+    {
+      "name": "6. Compare Operator.txt",
+      "path": "Progarmming Assignment/6. Compare Operator.txt"
+    },
+    {
+      "name": "Data Types.txt",
+      "path": "Progarmming Assignment/Data Types.txt"
+    },
+    {
+      "name": "Exercise 1.txt",
+      "path": "Progarmming Assignment/Exercise 1.txt"
+    },
+    {
+      "name": "Exercise 2.txt",
+      "path": "Progarmming Assignment/Exercise 2.txt"
+    },
+    {
+      "name": "inputs.txt",
+      "path": "Progarmming Assignment/inputs.txt"
+    },
+    {
+      "name": "print.txt",
+      "path": "Progarmming Assignment/print.txt"
+    },
+    {
+      "name": "Variables.txt",
+      "path": "Progarmming Assignment/Variables.txt"
+    }
+  ]
 }
