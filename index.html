@@ -1,12 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Web Assignments Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 5px solid #38bdf8;
+            padding-left: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background: #334155;
+            transform: translateY(-5px);
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1e293b;
+            margin-top: 40px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to Assignment Page</h1>
-    <a href="HTML Assignments/ass1.html">Assignment 01</a>
+
+<header>
+    Web Assignments Dashboard 🚀
+</header>
+
+<div class="container">
+
+    <!-- HTML Assignments -->
+    <h2>HTML Assignments</h2>
+    <div class="grid" id="htmlAssignments"></div>
+
+    <!-- JavaScript Tasks -->
+    <h2>JavaScript Tasks</h2>
+    <div class="grid" id="jsTasks"></div>
+
+    <!-- Programming -->
+    <h2>Programming Practice</h2>
+    <div class="grid">
+        <a href="Programming/print.txt" target="_blank"><div class="card">Print</div></a>
+        <a href="Programming/input.txt" target="_blank"><div class="card">Input</div></a>
+        <a href="Programming/variables.txt" target="_blank"><div class="card">Variables</div></a>
+        <a href="Programming/data-types.txt" target="_blank"><div class="card">Data Types</div></a>
+        <a href="Programming/arithmetic.txt" target="_blank"><div class="card">Arithmetic</div></a>
+        <a href="Programming/comparison.txt" target="_blank"><div class="card">Comparison</div></a>
+        <a href="Programming/exercises.txt" target="_blank"><div class="card">Exercises</div></a>
+    </div>
+
+</div>
+
+<footer>
+    Made by Suneel 💻🔥
+</footer>
+
+<script>
+    // HTML Assignments (1 to 75)
+    let htmlContainer = document.getElementById("htmlAssignments");
+
+    for (let i = 1; i <= 75; i++) {
+        let a = document.createElement("a");
+        a.href = "HTML/ass" + i + ".html";
+        a.target = "_blank";
+
+        let div = document.createElement("div");
+        div.className = "card";
+        div.innerText = "Ass " + i;
+
+        a.appendChild(div);
+        htmlContainer.appendChild(a);
+    }
+
+    // JavaScript Tasks (1 to 17)
+    let jsContainer = document.getElementById("jsTasks");
+
+    for (let i = 1; i <= 17; i++) {
+        let a = document.createElement("a");
+        a.href = "JavaScript/task" + i + ".html";
+        a.target = "_blank";
+
+        let div = document.createElement("div");
+        div.className = "card";
+        div.innerText = "Task " + i;
+
+        a.appendChild(div);
+        jsContainer.appendChild(a);
+    }
+</script>
+
 </body>
 </html>
