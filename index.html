@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment Tracker | Secure Dashboard</title>
+    <title>Student Dashboard | Login & Task Tracker</title>
     <style>
         * {
             margin: 0;
@@ -17,6 +17,7 @@
             min-height: 100vh;
         }
 
+        /* Login Page Styles */
         .login-page {
             position: fixed;
             top: 0;
@@ -28,6 +29,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            transition: all 0.3s ease;
         }
 
         .login-card {
@@ -37,7 +39,7 @@
             border-radius: 1.5rem;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(56,189,248,0.3);
         }
 
         .login-card h2 {
@@ -75,11 +77,13 @@
             border-radius: 0.75rem;
             color: white;
             font-size: 1rem;
+            transition: all 0.2s;
         }
 
         .input-group input:focus {
             outline: none;
             border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
         }
 
         .login-btn {
@@ -93,11 +97,12 @@
             color: #0f172a;
             cursor: pointer;
             margin-top: 1rem;
+            transition: transform 0.2s;
         }
 
         .login-btn:hover {
-            background: #7dd3fc;
             transform: translateY(-2px);
+            background: #7dd3fc;
         }
 
         .error-msg {
@@ -107,6 +112,7 @@
             text-align: center;
         }
 
+        /* Dashboard Styles */
         .dashboard {
             display: none;
         }
@@ -152,6 +158,7 @@
             color: white;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.2s;
         }
 
         .logout-btn:hover {
@@ -193,6 +200,7 @@
             border-radius: 2rem;
             color: white;
             cursor: pointer;
+            transition: 0.2s;
         }
 
         .reset-btn:hover {
@@ -208,7 +216,6 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            color: white;
         }
 
         .category-progress {
@@ -221,7 +228,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -249,10 +256,7 @@
             flex: 1;
             padding: 0.5rem;
             border-radius: 0.5rem;
-            font-size: 0.9rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            transition: 0.2s;
         }
 
         .task-link:hover {
@@ -295,8 +299,8 @@
             .container {
                 padding: 1rem;
             }
-            .task-link {
-                font-size: 0.8rem;
+            header {
+                padding: 1rem;
             }
         }
     </style>
@@ -306,8 +310,8 @@
 <!-- Login Page -->
 <div id="loginPage" class="login-page">
     <div class="login-card">
-        <h2>📚 Assignment Tracker</h2>
-        <p>Login to track your progress</p>
+        <h2>📚 TaskFlow</h2>
+        <p>Login to track your assignments</p>
         <div class="input-group">
             <label>Username</label>
             <input type="text" id="username" placeholder="Enter username" autocomplete="off">
@@ -359,37 +363,43 @@
 </div>
 
 <script>
-    // ==================== SECURE CREDENTIALS (Encrypted/Hidden) ====================
-    const ENCODED_USERS = [
-        { u: btoa("adrish"), p: btoa("asdf1234") },
-        { u: btoa("mubashar"), p: btoa("asdf1234") },
-        { u: btoa("suneel"), p: btoa("asdf1234") },
-        { u: btoa("vikram"), p: btoa("vikram123") },
-        { u: btoa("pardeep"), p: btoa("password123") },
-        { u: btoa("tushal"), p: btoa("umerkot123") },
-        { u: btoa("narender"), p: btoa("school123") },
-        { u: btoa("saroop"), p: btoa("umerkot123") },
-        { u: btoa("anand"), p: btoa("umerkot123") },
-        { u: btoa("papu"), p: btoa("umerkot123") },
-        { u: btoa("motiram"), p: btoa("umerkot123") },
-        { u: btoa("saqib"), p: btoa("sug99") },
-        { u: btoa("lajpat"), p: btoa("lajpatrai") },
-        { u: btoa("dileep"), p: btoa("dileep123") },
-        { u: btoa("zahid"), p: btoa("mirporkhas123") },
-        { u: btoa("mubashar"), p: btoa("asdf1234") },
-        { u: btoa("adrish"), p: btoa("asdf1234") },
+    // ==================== USERS DATABASE (Fixed - Plain Text) ====================
+    const USERS = [
+        { username: "adrish", password: "asdf1234" },
+        { username: "mubashar", password: "asdf1234" },
+        { username: "suneel", password: "asdf1234" },
+        { username: "vikram", password: "vikram123" },
+        { username: "pardeep", password: "password123" },
+        { username: "tushal", password: "umerkot123" },
+        { username: "narender", password: "school123" },
+        { username: "saroop", password: "umerkot123" },
+        { username: "anand", password: "umerkot123" },
+        { username: "papu", password: "umerkot123" },
+        { username: "motiram", password: "umerkot123" },
+        { username: "saqib", password: "sug99" },
+        { username: "lajpat", password: "lajpatrai" },
+        { username: "dileep", password: "dileep123" },
+        { username: "zahid", password: "mirporkhas123" }
     ];
-    
-    function authenticateUser(inputUsername, inputPassword) {
-        for (let user of ENCODED_USERS) {
-            const decodedUser = atob(user.u);
-            const decodedPass = atob(user.p);
-            if (decodedUser === inputUsername && decodedPass === inputPassword) {
-                return { username: decodedUser };
-            }
-        }
-        return null;
-    }
+
+    // ==================== SAMPLE ASSIGNMENTS (Fallback if data.json missing) ====================
+    const DEFAULT_ASSIGNMENTS = {
+        html: [
+            "HTML Assignments/assignment1.html",
+            "HTML Assignments/assignment2.html",
+            "HTML Assignments/assignment3.html"
+        ],
+        js: [
+            "Javascript assignments/task1.html",
+            "Javascript assignments/task2.html",
+            "Javascript assignments/task3.html"
+        ],
+        programming: [
+            { name: "Program 1 - Variables", path: "Progarmming Assignment/program1.txt" },
+            { name: "Program 2 - Loops", path: "Progarmming Assignment/program2.txt" },
+            { name: "Program 3 - Functions", path: "Progarmming Assignment/program3.txt" }
+        ]
+    };
 
     // ==================== GLOBAL VARIABLES ====================
     let currentUser = null;
@@ -397,147 +407,88 @@
     let userProgress = {};
     let allTasks = [];
 
-    // ==================== SORTING FUNCTIONS ====================
-    function extractNumber(filename) {
-        const match = filename.match(/\d+/);
-        if (match) {
-            return parseInt(match[0]);
-        }
-        return null;
-    }
-
-    function naturalSort(a, b) {
-        const fileNameA = a.split('/').pop();
-        const fileNameB = b.split('/').pop();
-        
-        const numA = extractNumber(fileNameA);
-        const numB = extractNumber(fileNameB);
-        
-        // If both have numbers, sort by number first
-        if (numA !== null && numB !== null) {
-            if (numA !== numB) {
-                return numA - numB;
-            }
-        }
-        
-        // If only one has a number, put numbered ones first
-        if (numA !== null && numB === null) return -1;
-        if (numA === null && numB !== null) return 1;
-        
-        // Otherwise sort alphabetically (A-Z)
-        return fileNameA.localeCompare(fileNameB, undefined, { numeric: true, sensitivity: 'base' });
-    }
-
-    function sortProgrammingByName(a, b) {
-        return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
-    }
-
-    // ==================== SESSION MANAGEMENT ====================
-    function saveSession() {
-        if (currentUser) {
-            sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-        } else {
-            sessionStorage.removeItem('loggedInUser');
-        }
-    }
-
-    function loadSession() {
-        const savedUser = sessionStorage.getItem('loggedInUser');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-            document.getElementById('currentUsername').textContent = `👤 ${currentUser.username}`;
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            loadUserProgress();
-            loadAssignments();
-            return true;
-        }
-        return false;
-    }
-
     // ==================== LOAD DATA FROM data.json ====================
     async function loadAssignments() {
         try {
             const response = await fetch('data.json');
-            const data = await response.json();
-            
-            // Sort all assignments in ascending order (A-Z, 1,2,3...)
-            if (data.html) {
-                data.html.sort(naturalSort);
+            if (response.ok) {
+                const data = await response.json();
+                assignmentsData = data;
+            } else {
+                console.log("data.json not found, using default assignments");
+                assignmentsData = DEFAULT_ASSIGNMENTS;
             }
-            
-            if (data.js) {
-                data.js.sort(naturalSort);
-            }
-            
-            if (data.programming) {
-                data.programming.sort(sortProgrammingByName);
-            }
-            
-            assignmentsData = data;
-            buildTasksList();
-            renderDashboard();
         } catch (error) {
-            console.error("Error loading data.json:", error);
-            document.getElementById('htmlGrid').innerHTML = '<div style="color: #ef4444; padding: 2rem; text-align: center;">⚠️ Could not load data.json file. Make sure it exists in the same directory.</div>';
+            console.log("Error loading data.json, using default assignments");
+            assignmentsData = DEFAULT_ASSIGNMENTS;
         }
+        buildTasksList();
+        renderDashboard();
     }
-    
+
+    // ==================== BUILD FLAT TASKS LIST ====================
     function buildTasksList() {
         allTasks = [];
         
-        // HTML assignments (already sorted)
-        assignmentsData.html.forEach((path, idx) => {
-            const displayName = getDisplayNameFromPath(path);
-            allTasks.push({
-                id: `html_${idx}_${btoa(path).substring(0, 30)}`,
-                category: 'html',
-                displayName: displayName,
-                path: path,
-                sortOrder: idx
+        // HTML assignments
+        if (assignmentsData.html && Array.isArray(assignmentsData.html)) {
+            assignmentsData.html.forEach((path, idx) => {
+                const displayName = getDisplayNameFromPath(path, 'html', idx);
+                allTasks.push({
+                    id: `html_${idx}`,
+                    category: 'html',
+                    displayName: displayName,
+                    path: path,
+                    originalIndex: idx
+                });
             });
-        });
+        }
         
-        // JS assignments (already sorted)
-        assignmentsData.js.forEach((path, idx) => {
-            const displayName = getDisplayNameFromPath(path);
-            allTasks.push({
-                id: `js_${idx}_${btoa(path).substring(0, 30)}`,
-                category: 'js',
-                displayName: displayName,
-                path: path,
-                sortOrder: idx
+        // JS assignments
+        if (assignmentsData.js && Array.isArray(assignmentsData.js)) {
+            assignmentsData.js.forEach((path, idx) => {
+                const displayName = getDisplayNameFromPath(path, 'js', idx);
+                allTasks.push({
+                    id: `js_${idx}`,
+                    category: 'js',
+                    displayName: displayName,
+                    path: path,
+                    originalIndex: idx
+                });
             });
-        });
+        }
         
-        // Programming assignments (already sorted)
-        assignmentsData.programming.forEach((item, idx) => {
-            const displayName = item.name || `Program ${idx + 1}`;
-            allTasks.push({
-                id: `prog_${idx}_${btoa(item.path).substring(0, 30)}`,
-                category: 'programming',
-                displayName: displayName,
-                path: item.path,
-                sortOrder: idx
+        // Programming assignments
+        if (assignmentsData.programming && Array.isArray(assignmentsData.programming)) {
+            assignmentsData.programming.forEach((item, idx) => {
+                const displayName = item.name || `Program ${idx + 1}`;
+                allTasks.push({
+                    id: `prog_${idx}`,
+                    category: 'programming',
+                    displayName: displayName,
+                    path: item.path,
+                    originalIndex: idx,
+                    rawItem: item
+                });
             });
-        });
+        }
     }
 
-    function getDisplayNameFromPath(path) {
+    function getDisplayNameFromPath(path, type, idx) {
+        if (!path) return `Task ${idx + 1}`;
         const fileName = path.split('/').pop();
-        let name = fileName.replace('.html', '').replace('.txt', '');
-        // Clean up the name
-        name = name.replace(/_/g, ' ').replace(/-/g, ' ');
-        if (name.length > 40) {
-            name = name.substring(0, 37) + '...';
+        if (type === 'html') {
+            return fileName.replace('.html', '').replace(/_/g, ' ').substring(0, 35);
+        } else if (type === 'js') {
+            return fileName.replace('.html', '').replace(/_/g, ' ');
         }
-        return name;
+        return `Task ${idx + 1}`;
     }
 
     // ==================== PROGRESS STORAGE ====================
     function loadUserProgress() {
         if (!currentUser) return {};
-        const storageKey = `task_progress_${btoa(currentUser.username)}`;
+        const storageKey = `task_progress_${currentUser.username}`;
         const saved = localStorage.getItem(storageKey);
         if (saved) {
             userProgress = JSON.parse(saved);
@@ -548,7 +499,7 @@
 
     function saveUserProgress() {
         if (!currentUser) return;
-        const storageKey = `task_progress_${btoa(currentUser.username)}`;
+        const storageKey = `task_progress_${currentUser.username}`;
         localStorage.setItem(storageKey, JSON.stringify(userProgress));
     }
 
@@ -563,7 +514,7 @@
     }
 
     function resetAllProgress() {
-        if (confirm('⚠️ Are you sure you want to reset ALL your progress? This cannot be undone.')) {
+        if (confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
             userProgress = {};
             saveUserProgress();
             renderDashboard();
@@ -628,7 +579,6 @@
             link.href = task.path;
             link.target = '_blank';
             link.className = 'task-link';
-            link.title = task.displayName;
             link.textContent = task.displayName;
             
             const checkboxDiv = document.createElement('div');
@@ -644,7 +594,7 @@
             };
             
             const label = document.createElement('label');
-            label.textContent = 'Done';
+            label.textContent = 'Complete';
             label.style.cursor = 'pointer';
             label.onclick = (e) => {
                 e.stopPropagation();
@@ -661,22 +611,22 @@
         });
     }
 
-    // ==================== LOGIN FUNCTION ====================
+    // ==================== LOGIN FUNCTION (FIXED) ====================
     function handleLogin() {
-        const username = document.getElementById('username').value.trim();
+        const username = document.getElementById('username').value.trim().toLowerCase();
         const password = document.getElementById('password').value;
         const errorDiv = document.getElementById('loginError');
         
         if (!username || !password) {
-            errorDiv.textContent = '❌ Please enter username and password';
+            errorDiv.textContent = 'Please enter username and password';
             return;
         }
         
-        const user = authenticateUser(username, password);
+        // Find user with matching credentials
+        const user = USERS.find(u => u.username === username && u.password === password);
         
         if (user) {
-            currentUser = user;
-            saveSession();
+            currentUser = { username: user.username };
             document.getElementById('currentUsername').textContent = `👤 ${currentUser.username}`;
             
             loadUserProgress();
@@ -686,8 +636,7 @@
             
             loadAssignments();
         } else {
-            errorDiv.textContent = '❌ Invalid username or password';
-            document.getElementById('password').value = '';
+            errorDiv.textContent = 'Invalid username or password';
         }
     }
     
@@ -695,8 +644,6 @@
         currentUser = null;
         userProgress = {};
         allTasks = [];
-        
-        sessionStorage.removeItem('loggedInUser');
         
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
@@ -706,13 +653,7 @@
         document.getElementById('loginError').textContent = '';
     }
     
-    // ==================== INITIALIZE ====================
-    if (!loadSession()) {
-        document.getElementById('loginPage').style.display = 'flex';
-        document.getElementById('dashboard').style.display = 'none';
-    }
-    
-    // Enter key support
+    // Allow Enter key to login
     document.getElementById('password')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleLogin();
     });
