@@ -135,7 +135,6 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
         }
 
         .username-badge {
@@ -209,6 +208,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            color: white;
         }
 
         .category-progress {
@@ -343,13 +343,13 @@
             <button class="reset-btn" onclick="resetAllProgress()">Reset All Progress</button>
         </div>
 
-        <h2 style="color: white;">📄 HTML Assignments <span class="category-progress" id="htmlProgress">0%</span></h2>
+        <h2>📄 HTML Assignments <span class="category-progress" id="htmlProgress">0%</span></h2>
         <div id="htmlGrid" class="grid"></div>
 
-        <h2 style="color: white;">⚡ JavaScript Tasks <span class="category-progress" id="jsProgress">0%</span></h2>
+        <h2>⚡ JavaScript Tasks <span class="category-progress" id="jsProgress">0%</span></h2>
         <div id="jsGrid" class="grid"></div>
 
-        <h2 style="color: white;">💻 Programming Practice <span class="category-progress" id="progProgress">0%</span></h2>
+        <h2>💻 Programming Practice <span class="category-progress" id="progProgress">0%</span></h2>
         <div id="progGrid" class="grid"></div>
     </div>
 
@@ -395,6 +395,41 @@
     let userProgress = {};
     let allTasks = [];
 
+    // ==================== SORTING FUNCTIONS ====================
+    function extractNumber(filename) {
+        const match = filename.match(/\d+/);
+        if (match) {
+            return parseInt(match[0]);
+        }
+        return null;
+    }
+
+    function naturalSort(a, b) {
+        const fileNameA = a.split('/').pop();
+        const fileNameB = b.split('/').pop();
+        
+        const numA = extractNumber(fileNameA);
+        const numB = extractNumber(fileNameB);
+        
+        // If both have numbers, sort by number first
+        if (numA !== null && numB !== null) {
+            if (numA !== numB) {
+                return numA - numB;
+            }
+        }
+        
+        // If only one has a number, put numbered ones first
+        if (numA !== null && numB === null) return -1;
+        if (numA === null && numB !== null) return 1;
+        
+        // Otherwise sort alphabetically (A-Z)
+        return fileNameA.localeCompare(fileNameB, undefined, { numeric: true, sensitivity: 'base' });
+    }
+
+    function sortProgrammingByName(a, b) {
+        return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+    }
+
     // ==================== SESSION MANAGEMENT ====================
     function saveSession() {
         if (currentUser) {
@@ -424,24 +459,17 @@
             const response = await fetch('data.json');
             const data = await response.json();
             
+            // Sort all assignments in ascending order (A-Z, 1,2,3...)
             if (data.html) {
-                data.html.sort((a, b) => {
-                    const numA = extractNumber(a);
-                    const numB = extractNumber(b);
-                    return numA - numB;
-                });
+                data.html.sort(naturalSort);
             }
             
             if (data.js) {
-                data.js.sort((a, b) => {
-                    const numA = extractNumber(a);
-                    const numB = extractNumber(b);
-                    return numA - numB;
-                });
+                data.js.sort(naturalSort);
             }
             
             if (data.programming) {
-                data.programming.sort((a, b) => a.name.localeCompare(b.name));
+                data.programming.sort(sortProgrammingByName);
             }
             
             assignmentsData = data;
@@ -453,19 +481,12 @@
         }
     }
     
-    function extractNumber(filename) {
-        const match = filename.match(/\d+/);
-        if (match) {
-            return parseInt(match[0]);
-        }
-        return Infinity;
-    }
-
     function buildTasksList() {
         allTasks = [];
         
+        // HTML assignments (already sorted)
         assignmentsData.html.forEach((path, idx) => {
-            const displayName = getDisplayNameFromPath(path, 'html', idx);
+            const displayName = getDisplayNameFromPath(path);
             allTasks.push({
                 id: `html_${idx}_${btoa(path).substring(0, 30)}`,
                 category: 'html',
@@ -475,8 +496,9 @@
             });
         });
         
+        // JS assignments (already sorted)
         assignmentsData.js.forEach((path, idx) => {
-            const displayName = getDisplayNameFromPath(path, 'js', idx);
+            const displayName = getDisplayNameFromPath(path);
             allTasks.push({
                 id: `js_${idx}_${btoa(path).substring(0, 30)}`,
                 category: 'js',
@@ -486,6 +508,7 @@
             });
         });
         
+        // Programming assignments (already sorted)
         assignmentsData.programming.forEach((item, idx) => {
             const displayName = item.name || `Program ${idx + 1}`;
             allTasks.push({
@@ -498,9 +521,11 @@
         });
     }
 
-    function getDisplayNameFromPath(path, type, idx) {
+    function getDisplayNameFromPath(path) {
         const fileName = path.split('/').pop();
         let name = fileName.replace('.html', '').replace('.txt', '');
+        // Clean up the name
+        name = name.replace(/_/g, ' ').replace(/-/g, ' ');
         if (name.length > 40) {
             name = name.substring(0, 37) + '...';
         }
@@ -649,7 +674,7 @@
         
         if (user) {
             currentUser = user;
-            saveSession(); // Save session to survive refresh
+            saveSession();
             document.getElementById('currentUsername').textContent = `👤 ${currentUser.username}`;
             
             loadUserProgress();
@@ -669,7 +694,6 @@
         userProgress = {};
         allTasks = [];
         
-        // Clear session
         sessionStorage.removeItem('loggedInUser');
         
         document.getElementById('loginPage').style.display = 'flex';
@@ -681,9 +705,7 @@
     }
     
     // ==================== INITIALIZE ====================
-    // Check if user was already logged in (on page load/refresh)
     if (!loadSession()) {
-        // Show login page if no session
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
     }

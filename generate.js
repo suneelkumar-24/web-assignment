@@ -15,31 +15,37 @@ function extractNumber(filename) {
     if (match) {
         return parseInt(match[0]);
     }
-    return Infinity;
+    return null;
 }
 
-// Function to extract number from path for sorting
-function getSortKey(filePath) {
-    const fileName = path.basename(filePath);
-    const number = extractNumber(fileName);
-    return number;
-}
-
-// Natural sort function for HTML and JS files
-function sortByNumber(a, b) {
-    const numA = getSortKey(a);
-    const numB = getSortKey(b);
+// Natural sort function for filenames (A-Z with proper number ordering)
+function naturalSort(a, b) {
+    // Get just the filename without path
+    const fileNameA = path.basename(a);
+    const fileNameB = path.basename(b);
     
-    if (numA !== numB) {
-        return numA - numB;
-    }
-    // If numbers are same, sort alphabetically
-    return a.localeCompare(b);
+    // Remove extension for better comparison
+    const nameA = fileNameA.replace(/\.(html|txt)$/i, '');
+    const nameB = fileNameB.replace(/\.(html|txt)$/i, '');
+    
+    // Use localeCompare for proper alphabetical sorting (A-Z)
+    // This handles numbers naturally (1,2,3,10,11 correctly)
+    return nameA.localeCompare(nameB, undefined, { 
+        numeric: true,      // This ensures 2 comes before 10
+        sensitivity: 'base', // Case insensitive
+        ignorePunctuation: true
+    });
 }
 
-// Sort function for programming files by name
+// Sort programming files by name (A-Z)
 function sortProgrammingByName(a, b) {
-    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+    const nameA = a.name.replace(/\.txt$/i, '');
+    const nameB = b.name.replace(/\.txt$/i, '');
+    return nameA.localeCompare(nameB, undefined, { 
+        numeric: true,
+        sensitivity: 'base',
+        ignorePunctuation: true
+    });
 }
 
 function scanFolder(folderPath) {
@@ -73,21 +79,42 @@ function scanFolder(folderPath) {
 // Scan all folders
 scanFolder(baseDir);
 
-// Sort HTML assignments in ascending order by number
-result.html.sort(sortByNumber);
+// Sort HTML assignments in alphabetical order (A-Z)
+console.log("📝 Sorting HTML assignments...");
+result.html.sort(naturalSort);
 
-// Sort JavaScript assignments in ascending order by number
-result.js.sort(sortByNumber);
+// Sort JavaScript assignments in alphabetical order (A-Z)
+console.log("📝 Sorting JavaScript assignments...");
+result.js.sort(naturalSort);
 
-// Sort Programming assignments alphabetically with numeric awareness
+// Sort Programming assignments alphabetically (A-Z)
+console.log("📝 Sorting Programming files...");
 result.programming.sort(sortProgrammingByName);
 
 // Write to data.json
 fs.writeFileSync("data.json", JSON.stringify(result, null, 2));
 
-console.log("✅ data.json generated successfully!");
-console.log(`📊 Statistics:`);
-console.log(`   - HTML Assignments: ${result.html.length} files`);
-console.log(`   - JavaScript Tasks: ${result.js.length} files`);
-console.log(`   - Programming Files: ${result.programming.length} files`);
-console.log(`\n📝 Files are sorted in ascending order!`);
+console.log("\n✅ data.json generated successfully!");
+console.log("\n📊 STATISTICS:");
+console.log(`   📄 HTML Assignments: ${result.html.length} files`);
+console.log(`   ⚡ JavaScript Tasks: ${result.js.length} files`);
+console.log(`   💻 Programming Files: ${result.programming.length} files`);
+
+console.log("\n📋 FIRST 10 HTML FILES (Alphabetical Order):");
+result.html.slice(0, 10).forEach((file, i) => {
+    const fileName = path.basename(file);
+    console.log(`   ${(i+1).toString().padStart(2)}. ${fileName}`);
+});
+
+console.log("\n📋 FIRST 10 JAVASCRIPT FILES (Alphabetical Order):");
+result.js.slice(0, 10).forEach((file, i) => {
+    const fileName = path.basename(file);
+    console.log(`   ${(i+1).toString().padStart(2)}. ${fileName}`);
+});
+
+console.log("\n📋 ALL PROGRAMMING FILES (Alphabetical Order):");
+result.programming.forEach((file, i) => {
+    console.log(`   ${(i+1).toString().padStart(2)}. ${file.name}`);
+});
+
+console.log("\n🎯 Sorting complete! Files are now in A-Z alphabetical order.");
