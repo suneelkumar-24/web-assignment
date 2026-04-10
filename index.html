@@ -359,9 +359,6 @@
 
 <script>
     // ==================== SECURE CREDENTIALS (Encrypted/Hidden) ====================
-    // Credentials are encoded to prevent direct viewing in source
-    // Real credentials: suneel/asdfsd and suneel12/a23sdfsd
-    
     const ENCODED_USERS = [
         { u: btoa("adrish"), p: btoa("asdf1234") },
         { u: btoa("mubashar"), p: btoa("asdf1234") },
@@ -377,11 +374,9 @@
         { u: btoa("saqib"), p: btoa("sug99") },
         { u: btoa("lajpat"), p: btoa("lajpatrai") },
         { u: btoa("dileep"), p: btoa("dileep123") },
-        { u: btoa("zahid"), p: btoa("mirporkhas123") },
-        { u: btoa("zahid"), p: btoa("mirporkhas123") },
+        { u: btoa("zahid"), p: btoa("mirporkhas123") }
     ];
     
-    // Function to decode credentials only during authentication
     function authenticateUser(inputUsername, inputPassword) {
         for (let user of ENCODED_USERS) {
             const decodedUser = atob(user.u);
@@ -399,13 +394,35 @@
     let userProgress = {};
     let allTasks = [];
 
+    // ==================== SESSION MANAGEMENT ====================
+    function saveSession() {
+        if (currentUser) {
+            sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+        } else {
+            sessionStorage.removeItem('loggedInUser');
+        }
+    }
+
+    function loadSession() {
+        const savedUser = sessionStorage.getItem('loggedInUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('currentUsername').textContent = `👤 ${currentUser.username}`;
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadUserProgress();
+            loadAssignments();
+            return true;
+        }
+        return false;
+    }
+
     // ==================== LOAD DATA FROM data.json ====================
     async function loadAssignments() {
         try {
             const response = await fetch('data.json');
             const data = await response.json();
             
-            // Sort assignments in ascending order
             if (data.html) {
                 data.html.sort((a, b) => {
                     const numA = extractNumber(a);
@@ -435,7 +452,6 @@
         }
     }
     
-    // Helper function to extract numbers from filenames for proper sorting
     function extractNumber(filename) {
         const match = filename.match(/\d+/);
         if (match) {
@@ -444,11 +460,9 @@
         return Infinity;
     }
 
-    // ==================== BUILD FLAT TASKS LIST ====================
     function buildTasksList() {
         allTasks = [];
         
-        // HTML assignments
         assignmentsData.html.forEach((path, idx) => {
             const displayName = getDisplayNameFromPath(path, 'html', idx);
             allTasks.push({
@@ -460,7 +474,6 @@
             });
         });
         
-        // JS assignments
         assignmentsData.js.forEach((path, idx) => {
             const displayName = getDisplayNameFromPath(path, 'js', idx);
             allTasks.push({
@@ -472,7 +485,6 @@
             });
         });
         
-        // Programming assignments
         assignmentsData.programming.forEach((item, idx) => {
             const displayName = item.name || `Program ${idx + 1}`;
             allTasks.push({
@@ -487,9 +499,7 @@
 
     function getDisplayNameFromPath(path, type, idx) {
         const fileName = path.split('/').pop();
-        // Remove extension and clean up name
         let name = fileName.replace('.html', '').replace('.txt', '');
-        // Truncate if too long
         if (name.length > 40) {
             name = name.substring(0, 37) + '...';
         }
@@ -638,6 +648,7 @@
         
         if (user) {
             currentUser = user;
+            saveSession(); // Save session to survive refresh
             document.getElementById('currentUsername').textContent = `👤 ${currentUser.username}`;
             
             loadUserProgress();
@@ -657,12 +668,23 @@
         userProgress = {};
         allTasks = [];
         
+        // Clear session
+        sessionStorage.removeItem('loggedInUser');
+        
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
         
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
         document.getElementById('loginError').textContent = '';
+    }
+    
+    // ==================== INITIALIZE ====================
+    // Check if user was already logged in (on page load/refresh)
+    if (!loadSession()) {
+        // Show login page if no session
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
     }
     
     // Enter key support
