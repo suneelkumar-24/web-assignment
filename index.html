@@ -450,6 +450,9 @@
         { username: "lajpat", password: "lajpatrai" },
         { username: "dileep", password: "dileep123" },
         { username: "zahid", password: "mirporkhas123" },
+        { username: "chander", password: "asdf1234" },
+        { username: "darshan", password: "asdf1234" },
+        { username: "farhan", password: "asdf1234" },
       ];
 
       // ==================== DEFAULT ASSIGNMENTS (fallback) ====================
@@ -922,12 +925,12 @@
           backupDiv.style.display = "flex";
           backupDiv.style.gap = "10px";
           backupDiv.style.alignItems = "center";
-          const exportBtn = document.createElement("button");
+        //   const exportBtn = document.createElement("button");
           exportBtn.textContent = "💾 Export Backup";
           exportBtn.className = "reset-btn";
           exportBtn.style.background = "#2c3e66";
           exportBtn.onclick = () => exportProgressToFile();
-          const importBtn = document.createElement("button");
+        //   const importBtn = document.createElement("button");
           importBtn.textContent = "📂 Import Backup";
           importBtn.className = "reset-btn";
           importBtn.style.background = "#2c3e66";
