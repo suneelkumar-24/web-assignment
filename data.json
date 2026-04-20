@@ -118,12 +118,12 @@
     "HTML Assignments/drive-assign (38).html",
     "HTML Assignments/drive-assign (39).html",
     "HTML Assignments/drive-assign (40).html",
-    "HTML Assignments/website11/index.html",
-    "HTML Assignments/website12/index.html",
-    "HTML Assignments/website13/index.html",
-    "HTML Assignments/website14/index.html",
-    "HTML Assignments/website15/index.html",
     "HTML Assignments/website16/index.html",
+    "HTML Assignments/website15/index.html",
+    "HTML Assignments/website14/index.html",
+    "HTML Assignments/website13/index.html",
+    "HTML Assignments/website12/index.html",
+    "HTML Assignments/website11/index.html",
     "HTML Assignments/website11/projects.html",
     "HTML Assignments/website0 (1).html",
     "HTML Assignments/website0 (2).html",
@@ -218,6 +218,16 @@
     {
       "name": "Variables.txt",
       "path": "Progarmming Assignment/Variables.txt"
+    }
+  ],
+  "mysql": [
+    {
+      "name": "Assignment - 1.html",
+      "path": "MySQL Assignments/Assignment - 1.html"
+    },
+    {
+      "name": "Assignment - 2.html",
+      "path": "MySQL Assignments/Assignment - 2.html"
     }
   ]
 }
